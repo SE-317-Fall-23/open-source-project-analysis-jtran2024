@@ -1,46 +1,66 @@
 # Assignment Submission
 
-## Project Selected: <Enter project name>
+## Project Selected: <Flask (Python)>
 
 ## I. Introduction
-- Briefly introduce the purpose of this section, which is to provide a detailed description of two test cases in the selected open-source project.
+- This section examines two specific test cases extracted from the Flask open-source project's testing suite. The purpose is to comprehensively understand the test cases, their objectives, and the underlying mechanisms employed for quality assurance within the Flask project. Through analyzing these test cases, we gain insights into Flask's configuration management in handling different sources and formats.
 
-## II. Test Case 1: [Name of Test Case]
+## II. Test Case 1: [test_config_from_file_json()]
 ### A. Description
-- Provide a concise overview of what this test case is designed to verify or validate within the project.
+- This test case is designed to verify Flask's ability to load configuration from a JSON file. It ensures the Flask application can read and integrate configuration settings from a specified JSON file.
 ### B. Gherkin Syntax (if applicable)
-- If you choose to use Gherkin syntax, write the Gherkin scenario for this test case.
+- Scenario: Loading configuration from a JSON file
+    Given the Flask application is running
+    When the Flask application loads configuration from a JSON file
+    Then the configuration should include the settings defined in the JSON file
 ### C. Test Steps
-- Enumerate the sequence of steps or actions involved in the test case.
+- 1. Start the Flask application.
+  2. Instruct the application to load configuration from a JSON file.
+  3. Validate that the configuration includes the settings defined in the JSON file.
 ### D. Code Segments Under Test
 - Identify specific code segments or functions that are being tested in this case.
 
 ```Java
-// Enter code
+app = flask.Flask(__name__)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+app.config.from_file(os.path.join(current_dir, "static", "config.json"), json.load)
 ```
 ### E. Initial State
-- Describe the initial state or conditions of the system or component before executing the test.
+- The initial state is the Flask application running.
 ### F. Transition
-- Explain the actions or events that trigger a change in the system's state.
+- The transition occurs when the Flask application is instructed to load configuration from a JSON file.
 ### G. Expected State
-- Clearly outline the expected state or outcome after the test steps have been completed.
+- After executing the test steps, the expected state is that the configuration of the Flask application should include the settings defined in the specified JSON file.
 
-## III. Test Case 2: [Name of Test Case]
+## III. Test Case 2: [test_from_prefixed_env_custom_prefix(monkeypatch)]
 ### A. Description
-- Provide a concise overview of the purpose of the second test case.
+- This test case is designed to validate the ability of Flask to load configuration settings from environment variables with a custom prefix. It ensures that only the environment variables with the specified custom prefix are used to update the configuration, while other environment variables do not affect it.
 ### B. Gherkin Syntax (if applicable)
-- If you choose to use Gherkin syntax, write the Gherkin scenario for this test case.
+- Scenario: Loading configuration from environment variables with a custom prefix
+    Given the Flask application is running
+    When environment variables with a custom prefix are set
+    And the Flask application loads configuration with the custom prefix
+    Then the configuration should include settings from the custom environment variables
+    And other environment variables should not affect the configuration
 ### C. Test Steps
-- Enumerate the sequence of steps or actions involved in this test case.
+- 1. Start the Flask application.
+  2. Set environment variables with a custom prefix.
+  3. Instruct the Flask application to load configuration with the custom prefix.
+  4. Validate that the configuration includes settings from the custom environment variables.
+  5. Ensure that other environment variables do not affect the configuration.
 ### D. Code Segments Under Test
 - Identify specific code segments or functions that are being tested in this case.
 ```Java
-// Enter code
+monkeypatch.setenv("FLASK_A", "a")
+monkeypatch.setenv("NOT_FLASK_A", "b")
+
+app = flask.Flask(__name__)
+app.config.from_prefixed_env("NOT_FLASK")
 ```
 ### E. Initial State
-- Describe the initial state or conditions of the system or component before executing the test.
+- The initial state is the Flask application running.
 ### F. Transition
-- Explain the actions or events that trigger a change in the system's state.
+- The transition occurs when the Flask application is instructed to load configuration settings from environment variables with a custom prefix.
 ### G. Expected State
-- Clearly outline the expected state or outcome after the test steps have been completed.
+- After executing the test steps, the expected state is that the configuration of the Flask application should include settings from the custom environment variables, and other environment variables should not affect the configuration.
 
